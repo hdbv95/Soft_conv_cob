@@ -40,6 +40,7 @@ async function consultaWatson(mensaje,contexto,req){
 }
 //funciones para consultar prestamos
 async function decisionDialogos(watsonResultado,req){
+  console.log('prueba');
   var entidad=watsonResultado.entities;
   var intencion=watsonResultado.intents;
   console.log(watsonResultado.output.nodes_visited[0]);
