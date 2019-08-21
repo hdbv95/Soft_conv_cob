@@ -149,16 +149,23 @@ async function decisionDialogos(watsonResultado,req){
       if(watsonResultado.context.lpago==undefined){
         watsonResultado.output.generic[0].response_type="option";
         watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
+       
         for(var i in entidad){
           if(entidad[i].entity=="sys-number"){
             SeleccionarPrestamoLP(watsonResultado);
           }
         }
       }
+<<<<<<< HEAD
       
         
       
       
+=======
+      if(watsonResultado.numeroPrestamo!=null){
+        watsonResultado.output.generic[0].response_type="link";
+      }
+>>>>>>> master
       
   }
 }
