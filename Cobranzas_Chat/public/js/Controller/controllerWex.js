@@ -142,7 +142,7 @@ async function decisionDialogos(watsonResultado,req){
     console.log('nodo asignar usuario');
   }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603') {
     console.log('Lugares de pago');
-      if(watsonResultado.context.prestamo==undefined){
+      if(watsonResultado.context.lpago==undefined){
         watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
         for(var i in entidad){
           if(entidad[i].entity=="sys-number"){
