@@ -18,7 +18,7 @@ var assistant = new watson.AssistantV1({
 });
 controllerWatson.postEnviarMensajeWex =async(req,res)=>{
     var mensaje=req.body.texto;
-    var context=new modelWatsonResultado(false,null,null,null,null,null,null);
+    var context=new modelWatsonResultado(false,null,null,null,null,null,null,false);
     if(req.session.context!=undefined){
       context=req.session.context;
     };
@@ -40,11 +40,9 @@ async function consultaWatson(mensaje,contexto,req){
 }
 //funciones para consultar prestamos
 async function decisionDialogos(watsonResultado,req){
-  console.log("PRUEBA");
   var entidad=watsonResultado.entities;
   var intencion=watsonResultado.intents;
   console.log(watsonResultado.output.nodes_visited[0]);
-  //Nodo saludo
   if(watsonResultado.output.nodes_visited[0]=='node_1_1564196062722'){
     console.log('nodo de saludo');
   }else if(watsonResultado.context.autentificar==false && watsonResultado.output.nodes_visited[0]=='node_3_1564202175836'){
@@ -67,29 +65,25 @@ async function decisionDialogos(watsonResultado,req){
     }
   }else if(watsonResultado.output.nodes_visited[0]=='node_4_1565839495062' || watsonResultado.output.nodes_visited[0]=='slot_2_1565962892288'   || watsonResultado.output.nodes_visited[0]=="node_1_1565962892286"  || watsonResultado.output.nodes_visited[0]=="slot_7_1565839603669" || watsonResultado.output.nodes_visited[0]=="node_6_1565841314671" || watsonResultado.output.nodes_visited[0]=="slot_7_1565841314677"){
     console.log('nodo dias en mora');
-      watsonResultado.output.generic[0]=[];
-      watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
-
-      for(var i in entidad){
-        if(entidad[i].entity=="sys-number"){
-          SeleccionarPrestamo(watsonResultado);
+      if(watsonResultado.context.prestamo==undefined){
+        watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
+        for(var i in entidad){
+          if(entidad[i].entity=="sys-number"){
+            SeleccionarPrestamo(watsonResultado);
+          }
         }
-      }
-      if(watsonResultado.context.prestamo!=undefined){
-        watsonResultado.output.generic[0]=[];
       }
       
   }else if(watsonResultado.output.nodes_visited[0]=='node_5_1566181166942'  || watsonResultado.output.nodes_visited[0]=='slot_8_1566181224797' || watsonResultado.context.listarPrestamos!=undefined   ){
     watsonResultado.context.numeroPrestamo=null;
     watsonResultado.output.text[0]="Por favor escoja un prestamo para continuar";
-    
     watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
     for(var i in entidad){
       if(entidad[i].entity=="sys-number"){
         SeleccionarPrestamo(watsonResultado);
       }
     }
-  }else if(watsonResultado.output.nodes_visited[0]=='node_6_1566273315619' || watsonResultado.output.nodes_visited[0]=='slot_4_1566321502220' ){
+  }else if(watsonResultado.output.nodes_visited[0]=='node_6_1566273315619' || watsonResultado.output.nodes_visited[0]=='slot_4_1566321502220' || watsonResultado.output.nodes_visited[0]=='node_7_1566273035851' ){
     console.log('nodo interes x dias calculado');
     for(var i in entidad){
       if(entidad[i].entity=="sys-date" ){
@@ -142,7 +136,10 @@ async function decisionDialogos(watsonResultado,req){
       watsonResultado.output.text[0]=watsonResultado.output.generic[0]=await watsonResultado.context.direcciones;
     } 
   }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566322566592'){
+    console.log('nodo cerrar sesion');
     req.session.destroy();
+  }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
+    console.log('nodo asignar usuario');
   }
   
 
@@ -178,9 +175,10 @@ async function validarCedula(watsonResultado){
     
 }
 function ConsultaPrestamo(watsonResultado){
+  watsonResultado.output.generic[0]=[];
   var token=watsonResultado.context.token;
   var json=jwt.decodeToken(token);
-  var prestamo={title:"Selecciona un prestamo para continuar",options: []}
+  var prestamo={response_type:"option",title:"Selecciona un prestamo para continuar",options: []}
 
   for(var i in json.prestamo){
     prestamo.options.push({
@@ -195,6 +193,8 @@ function ConsultaPrestamo(watsonResultado){
 async function SeleccionarPrestamo(watsonResultado){
   var token=watsonResultado.context.token;
   var json=jwt.decodeToken(token);
+  var respuestaText={response_type: "text",text: ""}
+
   for(var i in watsonResultado.entities){
     if(watsonResultado.entities[i].entity=="sys-number"){
       var valorPrestamo=watsonResultado.entities[i].value;
@@ -203,12 +203,13 @@ async function SeleccionarPrestamo(watsonResultado){
         if(json.prestamo[i].preNumero==valorPrestamo){
          watsonResultado.context.prestamos=json.prestamo[i];
          watsonResultado.context.numeroPrestamo=valorPrestamo;
-         watsonResultado.output.text[0]= await "El saldo pendiente para el prestamo #"+valorPrestamo+
+         respuestaText.text= await "El saldo pendiente para el prestamo #"+valorPrestamo+
           " de la institucion "+json.prestamo[i].institucion+
           " es de $"+json.prestamo[i].preValorxPagar+
           ", la fecha de pago es "+moment(json.prestamo[i].preFechaVencimiento).add(1,"days").format("YYYY-MM-DD")+
           ", y los dias de atraso son "+json.prestamo[i].DIAS+" dias";
-          watsonResultado.output.generic[0]=watsonResultado.output.text[0];
+          watsonResultado.output.generic[0]=respuestaText;
+          watsonResultado.output.text[0]=respuestaText;
           watsonResultado.context.system.dialog_stack[0]=[];
           watsonResultado.context.system.dialog_stack[0]={"dialog_node": "root"};
           break;

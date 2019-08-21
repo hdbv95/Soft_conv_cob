@@ -1,6 +1,6 @@
 module.exports =class WatsonResulado{
     
-    constructor (autentificar,usuario,prestamos,token,numeroPrestamo,direcciones,dirID){
+    constructor (autentificar,usuario,prestamos,token,numeroPrestamo,direcciones,dirID,asignarAsesor){
         this.autentificar=autentificar
         this.usuario=usuario
         this.prestamos=prestamos
@@ -8,6 +8,7 @@ module.exports =class WatsonResulado{
         this.numeroPrestamo=numeroPrestamo
         this.direcciones=direcciones
         this.dirID=dirID
+        this.asignarAsesor=asignarAsesor
     }
 
 }
