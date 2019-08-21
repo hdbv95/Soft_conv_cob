@@ -1,6 +1,10 @@
 var sql = require("seriate"); 
 var credencialesBD=require('../Conexion/credencialesWex');
 var persona={};
+var usuarios = [
+    {id:'1',user:'edison',pass:'softedison'},
+    {id:'2',user:'jhony',pass:'softjhony'}
+]
 
 
 //Actualizar correo
@@ -22,7 +26,7 @@ persona.actualizarCorreo=async(id,correo)=>{
     return consulta;
 } 
 
-
+ 
 //Actualizar telefono
 persona.actualizarTelefono=async(id,numTelf,campTelf)=>{
 sql.setDefaultConfig(credencialesBD.bd.config);
@@ -97,7 +101,40 @@ persona.consultarDireccion=async(id)=>{
     });
     return consulta;
 } 
+ 
+//loguear usuario y generar token
+persona.loginUsuario=(req,res)=>{
 
+
+    var params = req.body;
+
+    var user = params.user; 
+    var pass = params.pass
+    var ok = false;
+    var usuario;
+
+    usuarios.forEach(us => {
+        if(user == us.user && pass == us.pass){
+            ok = true;
+            usuario = us;
+        }
+    });
+       if(ok == true && params.gettoken){
+            return res.status(200).send({n:'1',
+            token:jwt2.createToken(usuario)
+        }); 
+        }else if(ok == true && !params.gettoken){
+           return res.status(200).send({n:'2',usuario});
+        }else{
+            return res.status(404).send({n:'3',message:'No existe el usuario'}); 
+        }
+
+        
+ 
+   
+    
+
+}
 
     
 module.exports=persona;
