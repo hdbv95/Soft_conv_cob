@@ -13,10 +13,11 @@ var appEnv = cfenv.getAppEnv();
 var usuarios = [];
 var salas = [];
 
+
 // trust first proxy 
 app.set('trust proxy', 1) ;
 app.use(cors({origin:[
-    "http://localhost:4200"
+    "http://192.168.10.221:4200"
   ],credentials:true})) 
 app.use(session({
   secret: 'keyboard cat',

@@ -37,6 +37,8 @@ prestamo.ConsultarTodosPrestamos=async(req,res)=>{ 
     
     } 
 prestamo.CompromisoPago=async(fechaCompromiso,numeroPrestamo)=>{ 
+    console.log(fechaCompromiso);
+    console.log(numeroPrestamo);
     sql.setDefaultConfig(credencialesBD.bd.config);
     const consulta =await sql.execute( {
     query: "update asignacion_chat set "+
