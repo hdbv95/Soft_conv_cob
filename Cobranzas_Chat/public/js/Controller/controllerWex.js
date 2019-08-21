@@ -140,9 +140,17 @@ async function decisionDialogos(watsonResultado,req){
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
+  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603') {
+    console.log('Lugares de pago');
+      if(watsonResultado.context.prestamo==undefined){
+        watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
+        for(var i in entidad){
+          if(entidad[i].entity=="sys-number"){
+            SeleccionarPrestamoLP(watsonResultado);
+          }
+        }
+      }
   }
-  
-
 }
 async function validarCedula(watsonResultado){
     var okcedula = validaciones.validarLongitudCedula(watsonResultado.input.text);
@@ -273,7 +281,31 @@ async function SeleccionarDireccion(watsonResultado){
     }
   };
 }
-
+//funciones lugares de pago
+async function SeleccionarPrestamoLP(watsonResultado){
+  var token=watsonResultado.context.token;
+  var json=jwt.decodeToken(token);
+  var respuestaText={response_type: "text",text: ""}
+  for(var i in watsonResultado.entities){
+    if(watsonResultado.entities[i].entity=="sys-number"){
+      var valorPrestamo=watsonResultado.entities[i].value;
+      for(var i=0; i<json.prestamo.length;i++){
+        if(json.prestamo[i].preNumero==valorPrestamo){
+         watsonResultado.context.prestamos=json.prestamo[i];
+         watsonResultado.context.numeroPrestamo=valorPrestamo;
+         respuestaText.text= await "https://www.google.com.ec/maps/search/"+json.prestamo[i].institucion.replace(' ','+');
+          watsonResultado.output.generic[0]=respuestaText;
+          watsonResultado.output.text[0]=respuestaText;
+          watsonResultado.context.system.dialog_stack[0]=[];
+          watsonResultado.context.system.dialog_stack[0]={"dialog_node": "root"};
+          break;
+        }else{
+          watsonResultado.context.numeroPrestamo=null;
+        }
+      }
+    }
+  };
+}
 
 module.exports=controllerWatson;
 
