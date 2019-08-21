@@ -95,6 +95,7 @@ async function decisionDialogos(watsonResultado,req){
         watsonResultado.output.text[0]+= fecha2.diff(fecha1, 'days')+ ' dias vencidos, el valor a pagar es de '+
         redondeo(valorTotal,2);2
         watsonResultado.output.generic[0].text=watsonResultado.output.text[0];
+        actualizacionCompromisoPago(watsonResultado,fecha2);
       }
     }
   }else if (watsonResultado.output.nodes_visited[0]=='node_7_1565831632550'|| watsonResultado.output.nodes_visited[0]=='node_2_1565832464223'||watsonResultado.output.nodes_visited[0]=='node_1_1564415483270'|| watsonResultado.output.nodes_visited[0]=='node_9_1565884085883'||watsonResultado.output.nodes_visited[0]=='slot_6_1565884101537') {
@@ -307,6 +308,10 @@ async function SeleccionarPrestamoLP(watsonResultado){
     }
   };
 }
+//actualizar compromiso de pago
+async function actualizacionCompromisoPago(watsonResultado,fecha ){
+  await prestamo.CompromisoPago(watsonResultado.numeroPrestamo,fecha);
+} 
 
 module.exports=controllerWatson;
 
