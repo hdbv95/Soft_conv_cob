@@ -88,14 +88,15 @@ async function decisionDialogos(watsonResultado,req){
     console.log('nodo interes x dias calculado');
     for(var i in entidad){
       if(entidad[i].entity=="sys-date" ){
+        actualizacionCompromisoPago(watsonResultado);
         var fecha1 = moment(watsonResultado.context.prestamos.preFechaVencimiento);
         var fecha2 = moment(watsonResultado.entities[i].value);
         var interes=((Math.pow((1+(watsonResultado.context.prestamos.preTasaInteres/100)),(fecha2.diff(fecha1, 'days')/anoComercial))-1)*100);
         var valorTotal=((watsonResultado.context.prestamos.preValorxPagar*interes)+watsonResultado.context.prestamos.preValorxPagar);
         watsonResultado.output.text[0]+= fecha2.diff(fecha1, 'days')+ ' dias vencidos, el valor a pagar es de '+
-        redondeo(valorTotal,2);2
+        redondeo(valorTotal,2)+" esperamos tu pago el dia "+ watsonResultado.entities[i].value;
         watsonResultado.output.generic[0].text=watsonResultado.output.text[0];
-        actualizacionCompromisoPago(watsonResultado,fecha2);
+        
       }
     }
   }else if (watsonResultado.output.nodes_visited[0]=='node_7_1565831632550'|| watsonResultado.output.nodes_visited[0]=='node_2_1565832464223'||watsonResultado.output.nodes_visited[0]=='node_1_1564415483270'|| watsonResultado.output.nodes_visited[0]=='node_9_1565884085883'||watsonResultado.output.nodes_visited[0]=='slot_6_1565884101537') {
@@ -142,9 +143,11 @@ async function decisionDialogos(watsonResultado,req){
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
-  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603') {
+  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724' ) {
     console.log('Lugares de pago');
+    watsonResultado.output.generic[0].response_type="link";
       if(watsonResultado.context.lpago==undefined){
+        watsonResultado.output.generic[0].response_type="option";
         watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
         for(var i in entidad){
           if(entidad[i].entity=="sys-number"){
@@ -152,6 +155,11 @@ async function decisionDialogos(watsonResultado,req){
           }
         }
       }
+      
+        
+      
+      
+      
   }
 }
 async function validarCedula(watsonResultado){
@@ -295,6 +303,7 @@ async function SeleccionarPrestamoLP(watsonResultado){
         if(json.prestamo[i].preNumero==valorPrestamo){
          watsonResultado.context.prestamos=json.prestamo[i];
          watsonResultado.context.numeroPrestamo=valorPrestamo;
+         respuestaText.response_type="link";
          respuestaText.text= await "https://www.google.com.ec/maps/search/"+json.prestamo[i].institucion.replace(' ','+');
           watsonResultado.output.generic[0]=respuestaText;
           watsonResultado.output.text[0]=respuestaText;
@@ -309,8 +318,15 @@ async function SeleccionarPrestamoLP(watsonResultado){
   };
 }
 //actualizar compromiso de pago
-async function actualizacionCompromisoPago(watsonResultado,fecha ){
-  await prestamo.CompromisoPago(watsonResultado.numeroPrestamo,fecha);
+async function actualizacionCompromisoPago(watsonResultado ){
+  var fecha;
+  for(var i in watsonResultado.entities){
+    if(watsonResultado.entities[i].entity=="sys-date"){
+      fecha =watsonResultado.entities[i].value
+    }
+     
+  }
+  await prestamo.CompromisoPago(fecha,watsonResultado.context.numeroPrestamo);
 } 
 
 module.exports=controllerWatson;
