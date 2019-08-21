@@ -22,6 +22,20 @@ val: id
 return consulta;
 
 } 
+prestamo.ConsultarTodosPrestamos=async(req,res)=>{ 
+    sql.setDefaultConfig(credencialesBD.bd.config);
+    const consulta =await sql.execute( {
+    query: "SELECT * FROM prestamo AS pre INNER JOIN persona AS pers ON pre.Cod_Persona = pers.Cod_Persona",
+    params: {
+    numidpersona: {
+    type: sql.nvarchar,
+    
+    }} 
+    } );
+    
+    return res.status(200).send({consulta});
+    
+    } 
 prestamo.CompromisoPago=async(fechaCompromiso,numeroPrestamo)=>{ 
     sql.setDefaultConfig(credencialesBD.bd.config);
     const consulta =await sql.execute( {
