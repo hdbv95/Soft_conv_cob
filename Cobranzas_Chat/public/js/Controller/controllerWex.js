@@ -88,14 +88,15 @@ async function decisionDialogos(watsonResultado,req){
     console.log('nodo interes x dias calculado');
     for(var i in entidad){
       if(entidad[i].entity=="sys-date" ){
+        actualizacionCompromisoPago(watsonResultado);
         var fecha1 = moment(watsonResultado.context.prestamos.preFechaVencimiento);
         var fecha2 = moment(watsonResultado.entities[i].value);
         var interes=((Math.pow((1+(watsonResultado.context.prestamos.preTasaInteres/100)),(fecha2.diff(fecha1, 'days')/anoComercial))-1)*100);
         var valorTotal=((watsonResultado.context.prestamos.preValorxPagar*interes)+watsonResultado.context.prestamos.preValorxPagar);
         watsonResultado.output.text[0]+= fecha2.diff(fecha1, 'days')+ ' dias vencidos, el valor a pagar es de '+
-        redondeo(valorTotal,2);2
+        redondeo(valorTotal,2)+" esperamos tu pago el dia "+ watsonResultado.entities[i].value;
         watsonResultado.output.generic[0].text=watsonResultado.output.text[0];
-        actualizacionCompromisoPago(watsonResultado,fecha2);
+        
       }
     }
   }else if (watsonResultado.output.nodes_visited[0]=='node_7_1565831632550'|| watsonResultado.output.nodes_visited[0]=='node_2_1565832464223'||watsonResultado.output.nodes_visited[0]=='node_1_1564415483270'|| watsonResultado.output.nodes_visited[0]=='node_9_1565884085883'||watsonResultado.output.nodes_visited[0]=='slot_6_1565884101537') {
@@ -309,8 +310,15 @@ async function SeleccionarPrestamoLP(watsonResultado){
   };
 }
 //actualizar compromiso de pago
-async function actualizacionCompromisoPago(watsonResultado,fecha ){
-  await prestamo.CompromisoPago(watsonResultado.numeroPrestamo,fecha);
+async function actualizacionCompromisoPago(watsonResultado ){
+  var fecha;
+  for(var i in watsonResultado.entities){
+    if(watsonResultado.entities[i].entity=="sys-date"){
+      fecha =watsonResultado.entities[i].value
+    }
+     
+  }
+  await prestamo.CompromisoPago(fecha,watsonResultado.context.numeroPrestamo);
 } 
 
 module.exports=controllerWatson;
