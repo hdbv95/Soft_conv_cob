@@ -143,16 +143,21 @@ async function decisionDialogos(watsonResultado,req){
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
-  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603') {
+  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724' ) {
     console.log('Lugares de pago');
+    watsonResultado.output.generic[0].response_type="link";
       if(watsonResultado.context.lpago==undefined){
+        watsonResultado.output.generic[0].response_type="option";
         watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
+       
         for(var i in entidad){
           if(entidad[i].entity=="sys-number"){
             SeleccionarPrestamoLP(watsonResultado);
           }
         }
       }
+
+      
   }
 }
 async function validarCedula(watsonResultado){
@@ -296,6 +301,7 @@ async function SeleccionarPrestamoLP(watsonResultado){
         if(json.prestamo[i].preNumero==valorPrestamo){
          watsonResultado.context.prestamos=json.prestamo[i];
          watsonResultado.context.numeroPrestamo=valorPrestamo;
+         respuestaText.response_type="link";
          respuestaText.text= await "https://www.google.com.ec/maps/search/"+json.prestamo[i].institucion.replace(' ','+');
           watsonResultado.output.generic[0]=respuestaText;
           watsonResultado.output.text[0]=respuestaText;
