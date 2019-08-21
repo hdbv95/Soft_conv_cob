@@ -156,16 +156,7 @@ async function decisionDialogos(watsonResultado,req){
           }
         }
       }
-<<<<<<< HEAD
-      
-        
-      
-      
-=======
-      if(watsonResultado.numeroPrestamo!=null){
-        watsonResultado.output.generic[0].response_type="link";
-      }
->>>>>>> master
+
       
   }
 }
