@@ -1,0 +1,46 @@
+<app-nav *ngIf="!identity"></app-nav>
+
+
+<particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles>
+
+
+<div class="container">
+  <div class="login">
+   
+    <div class="formLog">
+      <div class="header">
+        <h3>Iniciar Sesión</h3>
+      </div>
+      <form  #loginForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-row datosUser">
+          <div class="form-group col-md-12">
+
+              <mat-form-field class="example-full-width">
+                  <input style="color: white !important;" matInput placeholder="Ingresa tu usuario" required type="text" class="form-control" id="user" name="user"
+                  #user="ngModel" [(ngModel)]="usuarioLogueo.user" [class.is-invalid]="!user.valid && user.touched"
+                  [class.is-valid]="user.valid">
+                </mat-form-field>
+
+
+           
+          </div>
+
+          <div class="form-group col-md-12">
+              <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Ingresa tu contraseña" required type="text" class="form-control" id="pass" name="pass"
+                  #pass="ngModel" [(ngModel)]="usuarioLogueo.pass" [class.is-invalid]="!pass.valid && pass.touched"
+                  [class.is-valid]="pass.valid">
+                </mat-form-field>
+
+
+          </div>
+
+          <div class="btnA">
+              <button [disabled]=!loginForm.form.valid type="submit" class="btn btn-primary">Acceder</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

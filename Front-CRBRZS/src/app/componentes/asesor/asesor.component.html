@@ -1,0 +1,102 @@
+<app-navuser *ngIf="identity"></app-navuser>
+
+<div class="container">
+  <div class="row justify-content-center" style="height: 100% !important;">
+    <div class="col-6">
+
+      <div class="advertencia" *ngIf="!sala">
+        <p>Selecciona un chat</p>
+      </div>
+        <div class="chat" *ngIf="sala">
+            <div class="msg-header">
+              <div class="msg-header-img">
+                <img src="../../../assets/img/image.png">
+              </div> 
+             
+              <div class="active">
+                <h4>Asesor de cobranzas</h4>
+                <h5>Ahora...</h5>
+              </div>
+            </div>
+            <div class="content-chat" id="content-chat">
+                
+        
+              <div class="message-asesor">
+        
+                <div class="message-imgA">
+                  <img src="../../../assets/img/image.png">
+                </div>
+                <div class="message-textA">
+                    <p>Este es un mensaje de asesor</p>
+                </div>
+              </div>
+              <div class="message-cliente">
+               
+                <div class="message-textC">
+                    <p>Este es un mensaje de cliente</p>
+                </div>
+                <div class="message-imgC">
+                  <img src="../../../assets/img/persona2.png">
+                </div>
+              </div>
+        
+             
+      <div class="prueba">
+                  <div *ngFor="let msj of messages2">
+                      <div class=" message-cliente" *ngIf="msj.tipo=='a'">
+                          <div class="message-textC">
+                              <p>{{msj.msg}}</p>
+                          </div>
+                          <div class="message-imgC">
+                            <img src="../../../assets/img/image.png">
+                          </div>
+                         
+                        </div>
+                        <div class="message-asesor" *ngIf="msj.tipo=='c'">
+                            <div class="message-imgA">
+                                <img src="../../../assets/img/persona2.png">
+                              </div>
+                            <div class="message-textA">
+                                <p>{{msj.msg}}</p>
+                            </div>
+                           
+                          </div>
+         
+                </div>
+              </div>
+            </div>
+            <div id="contenedor" *ngIf="status == 'process'">
+                <div class="loader" id="loader">Loading...</div>
+        </div>
+            <div class="footer-chat">
+              <form #chatForm2="ngForm" (ngSubmit)="enviarmsjCliente(chatForm2)" class="formRg needs-validation" novalidate>
+                <div class="form-group">
+                  <input [disabled]="status == 'process'" required type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Escribe algo..."
+                  name="texto" #texto="ngModel" [(ngModel)]="chatU.texto" [class.is-invalid]="!texto.valid && texto.touched"
+                   [class.is-valid]="texto.valid">
+                </div>
+                <div class="bntsE"  *ngIf="status == 'n'">
+                    <button class="btn" [disabled]="!chatForm2.form.valid"><i class="fa fa-paper-plane-o" aria-hidden="true" ></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+      
+     
+    </div>
+    <div class="col-3">
+        <div class="advertencia2" *ngIf="clientes.length == 0">
+            <p>No existe clientes</p>
+          </div>
+      <div class="chats" *ngIf="clientes.length > 0">
+        <div class="user" *ngFor="let us of clientes" style="cursor: pointer;" (click)="abrirSala(us)">
+            <p>{{us.cliente}}</p>
+          <img src="../../../assets/img/persona2.png">
+          
+        </div>
+      
+      </div>
+     
+    </div>
+  </div>
+</div>

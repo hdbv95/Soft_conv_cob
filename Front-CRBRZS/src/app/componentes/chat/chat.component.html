@@ -1,0 +1,198 @@
+<div class="container">
+  <div class="chat" *ngIf="solAss !=true">
+    <div class="msg-header">
+      <div class="msg-header-img">
+        <img src="../../../assets/img/image.png">
+      </div>
+     
+      <div class="active">
+        <h4>Asesor de cobranzas</h4>
+        <h5>Ahora...</h5>
+      </div>
+    </div>
+    <div class="content-chat" id="content-chat">
+        
+
+      <div class="message-asesor">
+
+        <div class="message-imgA">
+          <img src="../../../assets/img/image.png">
+        </div>
+        <div class="message-textA">
+            <p>Este es un mensaje de tu asesor</p>
+        </div>
+      </div>
+      <div class="message-cliente">
+       
+        <div class="message-textC">
+            <p>Este es un mensaje de tu cliente</p>
+        </div>
+        <div class="message-imgC">
+          <img src="../../../assets/img/persona2.png">
+        </div>
+      </div>
+
+     
+      <div class="prueba">
+          <div *ngFor="let msj of messages">
+              <div class="message-asesor" *ngIf="msj.type=='a'">
+  
+                  <div class="message-imgA">
+                    <img src="../../../assets/img/image.png">
+                  </div>
+                  <div class="message-textA">
+                      <p>{{msj.texto}}</p>
+                  </div>
+                </div>
+                <div class="message-cliente" *ngIf="msj.type=='c'">
+         
+                    <div class="message-textC">
+                        <p>{{msj.texto}}</p>
+                    </div>
+                    <div class="message-imgC">
+                      <img src="../../../assets/img/persona2.png">
+                    </div>
+                  </div>
+                 
+                  <div class="message-asesor" *ngIf="msj.type=='optionsList'">
+                    <div class="message-imgA">
+                        <img src="../../../assets/img/image.png">
+                      </div>
+          
+                      <div class="message-textA">
+                        
+                          <div class="btn-group btn-group-lg btn-group-vertical">
+                             
+                              <button *ngFor="let optionList of msj.options" type="button" class="btn btn-primary" (click)="enviarOption(optionList)">{{optionList.label}}</button>
+                              
+                          </div>
+                      </div>
+                   
+                </div>
+                <div class="message-asesor" *ngIf="msj.type=='prestamosList'">
+                  <div class="message-imgA">
+                      <img src="../../../assets/img/image.png">
+                    </div>
+        
+                    <div class="message-textA">
+                      
+                        <div class="btn-group btn-group-lg btn-group-vertical">
+                            <p>Selecciona uno para continuar:</p>
+                            <button *ngFor="let prestam of msj.options" type="button" class="btn btn-primary" (click)="enviarNumPrestamo(prestam)">{{prestam.label}}</button>
+                            
+                        </div>
+                    </div>
+                 
+              </div>
+                 
+        </div>
+      </div>
+    </div>
+    <div id="contenedor" *ngIf="status == 'process'">
+        <div class="loader" id="loader">Loading...</div>
+</div>
+    <div class="footer-chat">
+      <form #chatForm2="ngForm" (ngSubmit)="enviarChat(chatForm2)" class="formRg needs-validation" novalidate>
+        <div class="form-group">
+          <input  required type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Escribe algo..."
+          name="texto" #texto="ngModel" [(ngModel)]="chatU.texto" [class.is-invalid]="!texto.valid && texto.touched"
+           [class.is-valid]="texto.valid">
+        </div>
+        <div class="bntsE"  >
+            <button class="btn" [disabled]="!chatForm2.form.valid"><i class="fa fa-paper-plane-o" aria-hidden="true" ></i></button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="chat" *ngIf="solAss ==true">
+      <div class="msg-header">
+        <div class="msg-header-img">
+          <img src="../../../assets/img/image.png">
+        </div>
+       
+        <div class="active2">
+          <h4 *ngIf="salaSelect">Asesor: {{salaSelect.asesor}}</h4>
+          <h5>Ahora...</h5>
+        </div>
+      </div>
+      <div class="content-chat" id="content-chat">
+          
+  
+        <div class="message-asesor">
+  
+          <div class="message-imgA">
+            <img src="../../../assets/img/image.png">
+          </div>
+          <div class="message-textA">
+              <p>Este es un mensaje de tu asesor</p>
+          </div>
+        </div>
+        <div class="message-cliente">
+         
+          <div class="message-textC">
+              <p>Este es un mensaje de tu cliente</p>
+          </div>
+          <div class="message-imgC">
+            <img src="../../../assets/img/persona2.png">
+          </div>
+        </div>
+  
+       
+        <div class="prueba">
+            <div *ngFor="let msj of messages2">
+                <div class="message-asesor" *ngIf="msj.tipo=='a'">
+    
+                    <div class="message-imgA">
+                      <img src="../../../assets/img/image.png">
+                    </div>
+                    <div class="message-textA">
+                        <p>{{msj.msg}}</p>
+                    </div>
+                  </div>
+                  <div class="message-cliente" *ngIf="msj.tipo=='c'">
+           
+                      <div class="message-textC">
+                          <p>{{msj.msg}}</p>
+                      </div>
+                      <div class="message-imgC">
+                        <img src="../../../assets/img/persona2.png">
+                      </div>
+                    </div>
+                    <div class="message-asesor" *ngIf="msj.type=='prestamosList'">
+                        <div class="message-imgA">
+                            <img src="../../../assets/img/image.png">
+                          </div>
+              
+                          <div class="message-textA">
+                            
+                              <div class="btn-group btn-group-lg btn-group-vertical">
+                                  <p>Selecciona uno para continuar:</p>
+                                  <button *ngFor="let prestam of msj.options" type="button" class="btn btn-primary" (click)="enviarNumPrestamo(prestam)">{{prestam.label}}</button>
+                                  
+                              </div>
+                          </div>
+                       
+                    </div>
+          </div>
+        </div>
+      </div>
+      <div id="contenedor" *ngIf="status == 'process'">
+          <div class="loader" id="loader">Loading...</div>
+  </div>
+      <div class="footer-chat">
+        <form #chatForm2="ngForm" (ngSubmit)="enviarmsjAsesor(chatForm2)" class="formRg needs-validation" novalidate>
+          <div class="form-group">
+            <input [disabled]="status == 'process'" required type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Escribe algo..."
+            name="texto" #texto="ngModel" [(ngModel)]="chatU.texto" [class.is-invalid]="!texto.valid && texto.touched"
+             [class.is-valid]="texto.valid">
+          </div>
+          <div class="bntsE"  *ngIf="status == 'n'">
+              <button class="btn" [disabled]="!chatForm2.form.valid"><i class="fa fa-paper-plane-o" aria-hidden="true" ></i></button>
+  
+          </div>
+        </form>
+      </div>
+    </div>
+</div>

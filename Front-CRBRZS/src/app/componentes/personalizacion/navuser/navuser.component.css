@@ -1,0 +1,53 @@
+
+ .nvSticky{
+    padding: 0 10px;
+    background: rgba(0,0,0,.85) !important;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+    transition-property: opacity,visibility,transform;
+    transition-duration: .3s;
+    transition-timing-function: ease-out;
+}
+.nvSticky2{
+   padding: 0 10px;
+   background: rgba(0,0,0,.85) !important;
+   position: block;
+   right: 0;
+   top: 0;
+   width: 100%;
+   
+  
+   transition-duration: .3s;
+   transition-timing-function: ease-out;
+}
+.visible{
+   opacity: 1;
+   visibility: visible;
+   transform: translateZ(0);
+}
+
+
+.nvSticky a, .nvSticky2 a{
+   font-family: 'Righteous', cursive;
+}
+.btna2{
+   position: relative;
+   margin: 0px;
+}
+.btna2 a{
+   font-family: 'Righteous', cursive;
+   color: white !important;
+   padding: 11px 9px;
+   text-decoration: none;
+   letter-spacing: 2px;
+   font-size: 10px;
+}
+.btna2 a:hover{
+   color: white;
+}

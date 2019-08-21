@@ -1,0 +1,13 @@
+.container{
+    margin-top: 5rem;
+}
+table{
+    width: 100% !important;
+}
+
+mat-form-field{
+    width: 100%;
+}
+mat-column-select {
+    overflow: initial;
+  }
