@@ -136,6 +136,7 @@ async function decisionDialogos(watsonResultado,req){
         var expresion = /([0-9A-z]*\.(|\s*)*\w+(\w+|\s*)*,(|\s*)([0-9A-z]*\.*\s*\w+(\w+|\s*)*,(|\s*)([0-9A-z]\w+\s*-*(\w+|\s*)*)))/g;
         var hallado = watsonResultado.input.text.match(expresion);
         var arr = hallado[0].split(',');
+        console.log(arr);
         var calleP=arr[0];
         var calleS=arr[1];
         var numCasa=arr[2];
@@ -183,7 +184,7 @@ async function validarCedula(watsonResultado){
         watsonResultado.context.autentificar=true;
         watsonResultado.context.usuario=validacion[0].Nom_Persona;
         watsonResultado.output.text[0]="Bienvenido "+validacion[0].Nom_Persona;
-        watsonResultado.output.generic[0].text="Bienvenido "+validacion[0].Nom_Persona;
+        watsonResultado.output.generic[0].text="Bienvenido "+validacion[0].Nom_Persona+" comencemos!";
         var token = jwt.createToken(validacion);
         watsonResultado.context.token = token;
       }else{

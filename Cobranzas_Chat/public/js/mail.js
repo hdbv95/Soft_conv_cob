@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-module.exports = (usuario,token) => {
+module.exports = (res,form) => {
  var transporter = nodemailer.createTransport({
  service: 'Gmail',
  auth: {
@@ -8,19 +8,20 @@ module.exports = (usuario,token) => {
  }
  });
 const mailOptions = {
- from: 'ASI',
- to: `<${usuario[0].Per_email}>`, // Cambia esta parte por el destinatario
- subject: 'Verificación de cuenta',
+ from: 'SOFTCONSULTING',
+ to: `<${form.email}>`, // Cambia esta parte por el destinatario
+ subject: 'Asesor',
  html: `
- <strong>Hola:</strong> ${usuario[0].Nom_Persona}<br/>
- <strong>Token:</strong> ${token} <br/>
+ <strong>Estimado/a </strong> ${form.usuario}<br/>
+ <strong>Tu URL de chat es el siguiente:</strong> ${form.url} <br/>
 
  `
  };
 transporter.sendMail(mailOptions, function (err, info) {
  if (err)
- console.log(err)
+ return res.status(500).send({message:"fallo"})
  else
  console.log(info);
+ return res.status(200).send({message:"enviado"})
  });
 }
