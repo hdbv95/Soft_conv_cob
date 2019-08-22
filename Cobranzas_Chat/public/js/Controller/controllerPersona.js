@@ -1,5 +1,6 @@
 var sql = require("seriate"); 
 var credencialesBD=require('../Conexion/credencialesWex');
+var jwt2 = require('../services/jwt2');
 var persona={};
 var usuarios = [
     {id:'1',user:'edison',pass:'softedison'},
@@ -135,6 +136,25 @@ persona.loginUsuario=(req,res)=>{
     
 
 }
+
+
+persona.enviarMail=(req,res)=>{
+    
+    var params = req.body;
+    form={
+        usuario:String,
+        email:String,
+        url:String,
+        asunto:String,
+
+    }
+    form.usuario = params.usuario;
+    form.email = params.email;
+    form.url = params.url;
+    form.asunto = params.asunto;
+    configMensaje(res,form);
+}
+
 
     
 module.exports=persona;
