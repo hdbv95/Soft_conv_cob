@@ -14,11 +14,11 @@ const controllerWatson={};
 const anoComercial=360;
 
 //conexion mongoDB
-mongoose.connect(credencialesWex.mongo.url,{user:credencialesWex.mongo.user,pass:credencialesWex.mongo.pwd,dbName: "tracking",useNewUrlParser: true}
-).then(()=>{console.log('successfully connected to MongoDB');/*mongod.cfg cambiar bindIp: de 127.0.0.1 a 0.0.0.0 */}).catch(err=>{
-  console.log("error");
-  process.exit();
-});
+// mongoose.connect(credencialesWex.mongo.url,{user:credencialesWex.mongo.user,pass:credencialesWex.mongo.pwd,dbName: "tracking",useNewUrlParser: true}
+// ).then(()=>{console.log('successfully connected to MongoDB');/*mongod.cfg cambiar bindIp: de 127.0.0.1 a 0.0.0.0 */}).catch(err=>{
+//   console.log("error");
+//   process.exit();
+// });
 
 var assistant = new watson.AssistantV1({
   iam_apikey: credencialesWex.principal.wconv_apikey,
@@ -136,6 +136,7 @@ async function decisionDialogos(watsonResultado,req){
         var expresion = /([0-9A-z]*\.(|\s*)*\w+(\w+|\s*)*,(|\s*)([0-9A-z]*\.*\s*\w+(\w+|\s*)*,(|\s*)([0-9A-z]\w+\s*-*(\w+|\s*)*)))/g;
         var hallado = watsonResultado.input.text.match(expresion);
         var arr = hallado[0].split(',');
+        console.log(arr);
         var calleP=arr[0];
         var calleS=arr[1];
         var numCasa=arr[2];
@@ -183,7 +184,7 @@ async function validarCedula(watsonResultado){
         watsonResultado.context.autentificar=true;
         watsonResultado.context.usuario=validacion[0].Nom_Persona;
         watsonResultado.output.text[0]="Bienvenido "+validacion[0].Nom_Persona;
-        watsonResultado.output.generic[0].text="Bienvenido "+validacion[0].Nom_Persona;
+        watsonResultado.output.generic[0].text="Bienvenido "+validacion[0].Nom_Persona+" comencemos!";
         var token = jwt.createToken(validacion);
         watsonResultado.context.token = token;
       }else{
