@@ -41,10 +41,6 @@ query: "UPDATE dbo.Persona SET "+campTelf+" = @numTelf WHERE Num_Identificacion
         numTelf:{
             type: sql.nvarchar,
             val:numTelf
-        },
-        campTelf:{
-            type: sql.nvarchar,
-            val:campTelf
         }
     }
 });
