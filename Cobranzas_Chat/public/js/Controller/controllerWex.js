@@ -6,10 +6,19 @@ var persona=require('../Controller/controllerPersona');
 var modelWatsonResultado=require('../Model/WatsonResultado');
 var jwt = require('../services/jwt');
 var moment= require('moment');
+var sugerencia = require('../Model/mongo').sugerencias;
+var mongoose = require('mongoose');
 const util = require('util');
 const controllerWatson={};
 
 const anoComercial=360;
+
+//conexion mongoDB
+mongoose.connect(credencialesWex.mongo.url,{user:credencialesWex.mongo.user,pass:credencialesWex.mongo.pwd,dbName: "tracking",useNewUrlParser: true}
+).then(()=>{console.log('successfully connected to MongoDB');/*mongod.cfg cambiar bindIp: de 127.0.0.1 a 0.0.0.0 */}).catch(err=>{
+  console.log("error");
+  process.exit();
+});
 
 var assistant = new watson.AssistantV1({
   iam_apikey: credencialesWex.principal.wconv_apikey,
@@ -40,7 +49,8 @@ async function consultaWatson(mensaje,contexto,req){
 }
 //funciones para consultar prestamos
 async function decisionDialogos(watsonResultado,req){
-  console.log('prueba');
+  /* var respuestaMongo= await sugerencia.find();
+  console.log(respuestaMongo); *///prueba select mongoDb
   var entidad=watsonResultado.entities;
   var intencion=watsonResultado.intents;
   console.log(watsonResultado.output.nodes_visited[0]);
