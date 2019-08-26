@@ -56,7 +56,7 @@ async function decisionDialogos(watsonResultado,req){
   console.log(watsonResultado.output.nodes_visited[0]);
   if(watsonResultado.output.nodes_visited[0]=='node_1_1564196062722'){
     console.log('nodo de saludo');
-  }else if(watsonResultado.context.autentificar==false && (watsonResultado.output.nodes_visited[0]=='node_3_1564202175836' ||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586')){
+  }else if(watsonResultado.context.autentificar==false && (watsonResultado.output.nodes_visited[0]=='node_3_1564202175836' ||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'||watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'||watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906')){
     console.log('nodo autentificar');
     for(var i in entidad){
       if(entidad[i].value=="#doc" || entidad[i].value=="cédula"){
@@ -68,7 +68,14 @@ async function decisionDialogos(watsonResultado,req){
     }
     if(watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
       watsonResultado.output.text[0]= 'ingrese un correo por favor por ejemplo[xxxx@xxxx.xxx]';
-      watsonResultado.output.generic[0].text="ingrese un correo por favor[xxxx@xxxx.xxx]";
+      watsonResultado.output.generic[0].text='ingrese un correo por favor[xxxx@xxxx.xxx]';
+    }else if(watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'){
+      watsonResultado.output.text[0]= 'ingrese un teléfono por favor para domicilio[xx-xxx-xxxx] o celular[xxx-xxx-xxxx]';
+      watsonResultado.output.generic[0].text='ingrese un teléfono por favor para domicilio[xx-xxx-xxxx] o celular[xxx-xxx-xxxx]';
+    }else if(watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906'){
+      watsonResultado.context.direcciones= await ConsultaDireccion(watsonResultado);
+      watsonResultado.output.generic[0]=[];
+      watsonResultado.output.text[0]=watsonResultado.output.generic[0]=await watsonResultado.context.direcciones;
     }
   }else if(watsonResultado.bandera==true && watsonResultado.output.nodes_visited[0]=='node_1_1564196557743'){
     console.log('nodo prestamo');
@@ -113,7 +120,7 @@ async function decisionDialogos(watsonResultado,req){
         
       }
     }
-  }else if (watsonResultado.output.nodes_visited[0]=='node_7_1565831632550'|| watsonResultado.output.nodes_visited[0]=='node_2_1565832464223'||watsonResultado.output.nodes_visited[0]=='node_1_1564415483270'|| watsonResultado.output.nodes_visited[0]=='node_9_1565884085883'||watsonResultado.output.nodes_visited[0]=='slot_6_1565884101537') {
+  }else if (watsonResultado.output.nodes_visited[0]=='node_7_1565831632550'||watsonResultado.output.nodes_visited[0]=='node_2_1565832464223'||watsonResultado.output.nodes_visited[0]=='node_1_1564415483270'||watsonResultado.output.nodes_visited[0]=='node_9_1565884085883'||watsonResultado.output.nodes_visited[0]=='slot_6_1565884101537'||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'||watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'||watsonResultado.output.nodes_visited[0]=='slot_3_1565832464230'||watsonResultado.output.nodes_visited[0]=='slot_9_1565829898090'||watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906'||watsonResultado.output.nodes_visited[0]=='slot_2_1566253747022'){
     console.log('opcion de actualizar');
     for (var i in entidad) {
       if (entidad[i].entity=='correo') {
@@ -134,7 +141,7 @@ async function decisionDialogos(watsonResultado,req){
           var numTelf = watsonResultado.input.text.match(expresionCasa);
           actualizacionTelefono(numTelf,'tlfDomicilio ',watsonResultado);
         }
-      }else if(entidad[i].entity=="sys-number"){
+      }else if(watsonResultado.context.autentificar == true && entidad[i].entity=="sys-number"){
         SeleccionarDireccion(watsonResultado);
       }else if(entidad[i].entity=='direcciones'){
         var expresion = /([0-9A-z]*\.(|\s*)*\w+(\w+|\s*)*,(|\s*)([0-9A-z]*\.*\s*\w+(\w+|\s*)*,(|\s*)([0-9A-z]\w+\s*-*(\w+|\s*)*)))/g;
@@ -148,7 +155,7 @@ async function decisionDialogos(watsonResultado,req){
         actualizacionDireccion(calleP,calleS,numCasa,watsonResultado);
       }
     }
-    if(intencion.length>0 && intencion[0].intent=='actualizarDireccion'){
+    if(watsonResultado.context.autentificar == true && intencion.length>0 && intencion[0].intent=='actualizarDireccion'){
       watsonResultado.context.direcciones= await ConsultaDireccion(watsonResultado);
       watsonResultado.output.generic[0]=[];
       watsonResultado.output.text[0]=watsonResultado.output.generic[0]=await watsonResultado.context.direcciones;
@@ -299,8 +306,8 @@ async function SeleccionarDireccion(watsonResultado){
   for(var i in dir.options){
     if(dir.options[i].value.input.text==watsonResultado.input.text){
      watsonResultado.context.dirID = watsonResultado.input.text;
-     watsonResultado.output.text[0]= await "La direccion a actualizar es:"+dir.options[i].label;
-     watsonResultado.output.generic[0]=[];
+     watsonResultado.output.text[0]= await "La direccion a actualizar es:"+dir.options[i].label+" Por favor utilice el formato [Calle Principal, Calle Secundaria, Numero de casa(xxx-xxx)]";
+     watsonResultado.output.generic[0].text=await "La direccion a actualizar es:"+dir.options[i].label+" Por favor utilice el formato [Calle Principal, Calle Secundaria, Numero de casa(xxx-xxx)]";
     }
   };
 }
