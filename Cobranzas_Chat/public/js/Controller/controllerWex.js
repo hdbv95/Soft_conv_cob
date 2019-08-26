@@ -66,6 +66,7 @@ async function decisionDialogos(watsonResultado,req){
         await validarCedula(watsonResultado);
       }
     }
+    consultaWatson('',watsonResultado.context,req);
   }else if(watsonResultado.bandera==true && watsonResultado.output.nodes_visited[0]=='node_1_1564196557743'){
     console.log('nodo prestamo');
     for(var i in entidad){
