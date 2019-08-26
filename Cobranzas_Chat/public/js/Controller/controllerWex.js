@@ -113,7 +113,7 @@ async function decisionDialogos(watsonResultado,req){
         
       }
     }
-  }else if (watsonResultado.output.nodes_visited[0]=='node_7_1565831632550'|| watsonResultado.output.nodes_visited[0]=='node_2_1565832464223'||watsonResultado.output.nodes_visited[0]=='node_1_1564415483270'|| watsonResultado.output.nodes_visited[0]=='node_9_1565884085883'||watsonResultado.output.nodes_visited[0]=='slot_6_1565884101537') {
+  }else if (watsonResultado.output.nodes_visited[0]=='node_7_1565831632550'|| watsonResultado.output.nodes_visited[0]=='node_2_1565832464223'||watsonResultado.output.nodes_visited[0]=='node_1_1564415483270'|| watsonResultado.output.nodes_visited[0]=='node_9_1565884085883'||watsonResultado.output.nodes_visited[0]=='slot_6_1565884101537'||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586') {
     console.log('opcion de actualizar');
     for (var i in entidad) {
       if (entidad[i].entity=='correo') {
