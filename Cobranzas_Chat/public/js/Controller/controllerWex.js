@@ -56,7 +56,7 @@ async function decisionDialogos(watsonResultado,req){
   console.log(watsonResultado.output.nodes_visited[0]);
   if(watsonResultado.output.nodes_visited[0]=='node_1_1564196062722'){
     console.log('nodo de saludo');
-  }else if(watsonResultado.context.autentificar==false && watsonResultado.output.nodes_visited[0]=='node_3_1564202175836'){
+  }else if(watsonResultado.context.autentificar==false && watsonResultado.output.nodes_visited[0]=='node_3_1564202175836' ||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
     console.log('nodo autentificar');
     for(var i in entidad){
       if(entidad[i].value=="#doc" || entidad[i].value=="cédula"){
