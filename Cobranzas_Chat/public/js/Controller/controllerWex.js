@@ -14,11 +14,11 @@ const controllerWatson={};
 const anoComercial=360;
 
 //conexion mongoDB
-mongoose.connect(credencialesWex.mongo.url,{user:credencialesWex.mongo.user,pass:credencialesWex.mongo.pwd,dbName: "tracking",useNewUrlParser: true}
-).then(()=>{console.log('successfully connected to MongoDB');/*mongod.cfg cambiar bindIp: de 127.0.0.1 a 0.0.0.0 */}).catch(err=>{
-  console.log("error");
-  process.exit();
-});
+// mongoose.connect(credencialesWex.mongo.url,{user:credencialesWex.mongo.user,pass:credencialesWex.mongo.pwd,dbName: "tracking",useNewUrlParser: true}
+// ).then(()=>{console.log('successfully connected to MongoDB');/*mongod.cfg cambiar bindIp: de 127.0.0.1 a 0.0.0.0 */}).catch(err=>{
+//   console.log("error");
+//   process.exit();
+// });
 
 var assistant = new watson.AssistantV1({
   iam_apikey: credencialesWex.principal.wconv_apikey,
