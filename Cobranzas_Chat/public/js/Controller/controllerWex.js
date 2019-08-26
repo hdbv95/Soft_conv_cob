@@ -66,13 +66,13 @@ async function decisionDialogos(watsonResultado,req){
         await validarCedula(watsonResultado);
       }
     }
-    if(watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
+    if(watsonResultado.context.autentificar==true&&watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
       watsonResultado.output.text[0]= 'ingrese un correo por favor por ejemplo[xxxx@xxxx.xxx]';
       watsonResultado.output.generic[0].text='ingrese un correo por favor[xxxx@xxxx.xxx]';
-    }else if(watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'){
+    }else if(watsonResultado.context.autentificar==true&&watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'){
       watsonResultado.output.text[0]= 'ingrese un teléfono por favor para domicilio[xx-xxx-xxxx] o celular[xxx-xxx-xxxx]';
       watsonResultado.output.generic[0].text='ingrese un teléfono por favor para domicilio[xx-xxx-xxxx] o celular[xxx-xxx-xxxx]';
-    }else if(watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906'){
+    }else if(watsonResultado.context.autentificar==true&&watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906'){
       watsonResultado.context.direcciones= await ConsultaDireccion(watsonResultado);
       watsonResultado.output.generic[0]=[];
       watsonResultado.output.text[0]=watsonResultado.output.generic[0]=await watsonResultado.context.direcciones;
