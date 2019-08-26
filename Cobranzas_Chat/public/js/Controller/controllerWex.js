@@ -67,8 +67,8 @@ async function decisionDialogos(watsonResultado,req){
       }
     }
     if(watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
-      watsonResultado.output.text[0]= 'ingrese un correo por favor';
-      watsonResultado.output.generic[0].text="ingrese un correo por favor";
+      watsonResultado.output.text[0]= 'ingrese un correo por favor por ejemplo[xxxx@xxxx.xxx]';
+      watsonResultado.output.generic[0].text="ingrese un correo por favor[xxxx@xxxx.xxx]";
     }
   }else if(watsonResultado.bandera==true && watsonResultado.output.nodes_visited[0]=='node_1_1564196557743'){
     console.log('nodo prestamo');
