@@ -29,7 +29,7 @@ var assistant = new watson.AssistantV1({
   url: credencialesWex.principal.wconv_url
 });
 
-var NLU= new naturalLanguage({
+/* var NLU= new naturalLanguage({
   version: credencialesWex.NLU.wconv_version_date,
   iam_apikey: credencialesWex.NLU.wconv_apikey,
   url: credencialesWex.NLU.wconv_url
@@ -64,7 +64,7 @@ NLU.analyze(analyzeParams)
 })
 .catch(err => {
   console.log('error:', err);
-});
+}); */
 
 
 controllerWatson.postEnviarMensajeWex =async(req,res)=>{
@@ -292,9 +292,11 @@ async function SeleccionarPrestamo(watsonResultado,req){
           " de la institucion "+json.prestamo[i].institucion+
           " es de $"+json.prestamo[i].preValorxPagar+
           ", la fecha de pago es "+moment(json.prestamo[i].preFechaVencimiento).add(1,"days").format("YYYY-MM-DD")+
-          ", y los dias de atraso son "+json.prestamo[i].DIAS+" dias";
+          ", y los dias de atraso son "+json.prestamo[i].DIAS+" dias, ¿te gustaria cancelar?";
           watsonResultado.output.generic[0]=respuestaText;
-          watsonResultado.output.text[0]=respuestaText;         
+          watsonResultado.output.text[0]=respuestaText;
+          watsonResultado.context.system.dialog_stack[0]=[]; 
+          watsonResultado.context.system.dialog_stack[0]={"dialog_node": "response_2_1566838080119"};        
           break;
         }else{
           watsonResultado.context.numeroPrestamo=null;
