@@ -51,7 +51,6 @@ app.use(morgan('dev'));
 
 app.use("/cobranzas",pruebaRutas);
 
-
 io.on('connection', (socket)=>{
     console.log("USUARIO CONECTADO"+socket.id);
   
