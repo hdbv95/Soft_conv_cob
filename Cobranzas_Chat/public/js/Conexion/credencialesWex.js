@@ -20,6 +20,10 @@ var tramos={
         url:'mongodb://192.168.10.167:27017/tracking',
         user: "admin",
         pwd: "123"
+    },NLU:{
+        wconv_version_date : '2019-01-01',
+        wconv_apikey : 'Xi5-lBPBzaio_37A8b6GHn3BTuVaM3s6lv2lqBoZYjgS',
+        wconv_url : 'https://gateway.watsonplatform.net/natural-language-understanding/api',
     }
 }
 

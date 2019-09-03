@@ -1,3 +1,7 @@
+var naturalLanguage = require('ibm-watson/natural-language-understanding/v1');
+const fs=require('fs');
+
+
 var watson = require('watson-developer-cloud');
 var credencialesWex=require('../Conexion/credencialesWex');
 var validaciones=require('../validaciones');
@@ -10,7 +14,6 @@ var sugerencia = require('../Model/mongo').sugerencias;
 var mongoose = require('mongoose');
 const util = require('util');
 const controllerWatson={};
-
 const anoComercial=360;
 
 //conexion mongoDB
@@ -25,7 +28,47 @@ var assistant = new watson.AssistantV1({
   version: credencialesWex.principal.wconv_version_date,
   url: credencialesWex.principal.wconv_url
 });
+
+var NLU= new naturalLanguage({
+  version: credencialesWex.NLU.wconv_version_date,
+  iam_apikey: credencialesWex.NLU.wconv_apikey,
+  url: credencialesWex.NLU.wconv_url
+});
+
+
+var analyzeParams = {
+  "url": "https://twitter.com/mashirafael/status/1163008162385018880",
+  "features": {
+    "sentiment": {
+      "targets": [
+        "Rateros Miserables",
+        "oranges",
+        "broccoli"
+      ]
+    },
+    "keywords": {
+      "emotion": true
+    }
+  }
+}
+
+NLU.analyze(analyzeParams)
+.then(analysisResults => {
+  fs.writeFile('./archivo1.json', JSON.stringify(analysisResults), error => {
+    if (error)
+      console.log(error);
+    else
+      console.log('El archivo fue creado');
+  });
+  
+})
+.catch(err => {
+  console.log('error:', err);
+});
+
+
 controllerWatson.postEnviarMensajeWex =async(req,res)=>{
+
     var mensaje=req.body.texto;
     var context=new modelWatsonResultado(false,null,null,null,null,null,null,false);
     if(req.session.context!=undefined){
@@ -56,7 +99,7 @@ async function decisionDialogos(watsonResultado,req){
   console.log(watsonResultado.output.nodes_visited[0]);
   if(watsonResultado.output.nodes_visited[0]=='node_1_1564196062722'){
     console.log('nodo de saludo');
-  }else if(watsonResultado.context.autentificar==false && (watsonResultado.output.nodes_visited[0]=='node_3_1564202175836' ||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'||watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'||watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906')){
+  }else if(watsonResultado.context.autentificar==false && (watsonResultado.output.nodes_visited[0]=='node_3_1564202175836' || watsonResultado.output.nodes_visited[0]=='node_1_1565962892286' || watsonResultado.output.nodes_visited[0]=='slot_9_1567193904097' || watsonResultado.output.nodes_visited[0]=='node_6_1565841314671' || watsonResultado.output.nodes_visited[0]=='slot_2_1567193679116' || watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'  ||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'||watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'||watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906' ||watsonResultado.output.nodes_visited[0]=='slot_9_1566838025356' )){
     console.log('nodo autentificar');
     for(var i in entidad){
       if(entidad[i].value=="#doc" || entidad[i].value=="cédula"){
@@ -66,18 +109,21 @@ async function decisionDialogos(watsonResultado,req){
         await validarCedula(watsonResultado);
       }
     }
-    if(watsonResultado.context.autentificar==true&&watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
+    if(watsonResultado.context.autentificar==true && (watsonResultado.output.nodes_visited[0]=='slot_9_1566838025356'  || watsonResultado.output.nodes_visited[0]=='slot_9_1567193904097'||  watsonResultado.output.nodes_visited[0]=='slot_2_1567193679116' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655' )){
+      watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
+    }
+    if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
       watsonResultado.output.text[0]= 'ingrese un correo por favor por ejemplo[xxxx@xxxx.xxx]';
       watsonResultado.output.generic[0].text='ingrese un correo por favor[xxxx@xxxx.xxx]';
-    }else if(watsonResultado.context.autentificar==true&&watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'){
+    }else if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'){
       watsonResultado.output.text[0]= 'ingrese un teléfono por favor para domicilio[xx-xxx-xxxx] o celular[xxx-xxx-xxxx]';
       watsonResultado.output.generic[0].text='ingrese un teléfono por favor para domicilio[xx-xxx-xxxx] o celular[xxx-xxx-xxxx]';
-    }else if(watsonResultado.context.autentificar==true&&watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906'){
+    }else if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906'){
       watsonResultado.context.direcciones= await ConsultaDireccion(watsonResultado);
       watsonResultado.output.generic[0]=[];
       watsonResultado.output.text[0]=watsonResultado.output.generic[0]=await watsonResultado.context.direcciones;
     }
-  }else if(watsonResultado.bandera==true && watsonResultado.output.nodes_visited[0]=='node_1_1564196557743'){
+  }else if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='node_1_1564196557743'){
     console.log('nodo prestamo');
     for(var i in entidad){
       if(entidad[i].entity=="sys-number"){
@@ -85,18 +131,17 @@ async function decisionDialogos(watsonResultado,req){
         //SeleccionarPrestamo(watsonResultado);
       }
     }
-  }else if(watsonResultado.output.nodes_visited[0]=='node_4_1565839495062' || watsonResultado.output.nodes_visited[0]=='slot_2_1565962892288'   || watsonResultado.output.nodes_visited[0]=="node_1_1565962892286"  || watsonResultado.output.nodes_visited[0]=="slot_7_1565839603669" || watsonResultado.output.nodes_visited[0]=="node_6_1565841314671" || watsonResultado.output.nodes_visited[0]=="slot_7_1565841314677"){
-    console.log('nodo dias en mora');
-      if(watsonResultado.context.prestamo==undefined){
-        watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
-        for(var i in entidad){
-          if(entidad[i].entity=="sys-number"){
-            SeleccionarPrestamo(watsonResultado);
+  }else if(watsonResultado.context.autentificar==true && (watsonResultado.output.nodes_visited[0]=='node_4_1565839495062' || watsonResultado.output.nodes_visited[0]=='slot_9_1567193904097'  || watsonResultado.output.nodes_visited[0]=='slot_2_1567193679116' || watsonResultado.output.nodes_visited[0]=='slot_9_1566838025356'  || watsonResultado.output.nodes_visited[0]=='slot_2_1565962892288'   || watsonResultado.output.nodes_visited[0]=="node_1_1565962892286"  || watsonResultado.output.nodes_visited[0]=="slot_7_1565839603669" || watsonResultado.output.nodes_visited[0]=="node_6_1565841314671" || watsonResultado.output.nodes_visited[0]=="slot_7_1565841314677")){
+    console.log("nodo-diasMora");    
+    if(watsonResultado.context.prestamo==undefined){
+          watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
+          for(var i in entidad){
+            if(entidad[i].entity=="sys-number"){
+              SeleccionarPrestamo(watsonResultado,req);
+            }
           }
-        }
-      }
-      
-  }else if(watsonResultado.output.nodes_visited[0]=='node_5_1566181166942'  || watsonResultado.output.nodes_visited[0]=='slot_8_1566181224797' || watsonResultado.context.listarPrestamos!=undefined   ){
+    }
+  }else if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'   || watsonResultado.output.nodes_visited[0]=='slot_8_1566181224797' || watsonResultado.context.listarPrestamos!=undefined   ){
     watsonResultado.context.numeroPrestamo=null;
     watsonResultado.output.text[0]="Por favor escoja un prestamo para continuar";
     watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
@@ -105,6 +150,7 @@ async function decisionDialogos(watsonResultado,req){
         SeleccionarPrestamo(watsonResultado);
       }
     }
+    
   }else if(watsonResultado.output.nodes_visited[0]=='node_6_1566273315619' || watsonResultado.output.nodes_visited[0]=='slot_4_1566321502220' || watsonResultado.output.nodes_visited[0]=='node_7_1566273035851' ){
     console.log('nodo interes x dias calculado');
     for(var i in entidad){
@@ -162,6 +208,7 @@ async function decisionDialogos(watsonResultado,req){
     } 
   }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566322566592'){
     console.log('nodo cerrar sesion');
+    watsonResultado.context=null;
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
@@ -228,7 +275,7 @@ function ConsultaPrestamo(watsonResultado){
   
  return prestamo;
 }
-async function SeleccionarPrestamo(watsonResultado){
+async function SeleccionarPrestamo(watsonResultado,req){
   var token=watsonResultado.context.token;
   var json=jwt.decodeToken(token);
   var respuestaText={response_type: "text",text: ""}
@@ -247,9 +294,7 @@ async function SeleccionarPrestamo(watsonResultado){
           ", la fecha de pago es "+moment(json.prestamo[i].preFechaVencimiento).add(1,"days").format("YYYY-MM-DD")+
           ", y los dias de atraso son "+json.prestamo[i].DIAS+" dias";
           watsonResultado.output.generic[0]=respuestaText;
-          watsonResultado.output.text[0]=respuestaText;
-          watsonResultado.context.system.dialog_stack[0]=[];
-          watsonResultado.context.system.dialog_stack[0]={"dialog_node": "root"};
+          watsonResultado.output.text[0]=respuestaText;         
           break;
         }else{
           watsonResultado.context.numeroPrestamo=null;
