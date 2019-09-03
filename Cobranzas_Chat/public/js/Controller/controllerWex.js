@@ -1,6 +1,3 @@
-var naturalLanguage = require('ibm-watson/natural-language-understanding/v1');
-const fs=require('fs');
-
 
 var watson = require('watson-developer-cloud');
 var credencialesWex=require('../Conexion/credencialesWex');
@@ -27,43 +24,6 @@ var assistant = new watson.AssistantV1({
   iam_apikey: credencialesWex.principal.wconv_apikey,
   version: credencialesWex.principal.wconv_version_date,
   url: credencialesWex.principal.wconv_url
-});
-
-var NLU= new naturalLanguage({
-  version: credencialesWex.NLU.wconv_version_date,
-  iam_apikey: credencialesWex.NLU.wconv_apikey,
-  url: credencialesWex.NLU.wconv_url
-});
-
-
-var analyzeParams = {
-  "url": "https://twitter.com/mashirafael/status/1163008162385018880",
-  "features": {
-    "sentiment": {
-      "targets": [
-        "Rateros Miserables",
-        "oranges",
-        "broccoli"
-      ]
-    },
-    "keywords": {
-      "emotion": true
-    }
-  }
-}
-
-NLU.analyze(analyzeParams)
-.then(analysisResults => {
-  fs.writeFile('./archivo1.json', JSON.stringify(analysisResults), error => {
-    if (error)
-      console.log(error);
-    else
-      console.log('El archivo fue creado');
-  });
-  
-})
-.catch(err => {
-  console.log('error:', err);
 });
 
 

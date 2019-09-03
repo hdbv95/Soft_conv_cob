@@ -4,6 +4,7 @@ var router = express.Router();
 var controllereWex=require('../Controller/controllerWex');
 var controllerPrestamo=require('../Controller/controllerPrestamo');
 var controllerPersona=require('../Controller/controllerPersona');
+var controllerNLU= require('../Controller/ControllerNLU');
 const validatePayloadMiddleware = (req,res,next)=>{
 
     if(req.body){
@@ -18,6 +19,7 @@ const validatePayloadMiddleware = (req,res,next)=>{
 router.post('/enviarMensaje', validatePayloadMiddleware,controllereWex.postEnviarMensajeWex);
 router.get('/obtener-prestamos',controllerPrestamo.ConsultarTodosPrestamos);
 router.post('/login',controllerPersona.loginUsuario);
-router.post('/enviarMail',controllerPersona.enviarMail)
+router.post('/enviarMail',controllerPersona.enviarMail);
+router.post('/analisiSentimientos',controllerNLU.postAnalizarTexto);
 
 module.exports=router;
