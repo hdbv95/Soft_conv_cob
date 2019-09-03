@@ -59,7 +59,7 @@ async function decisionDialogos(watsonResultado,req){
   console.log(watsonResultado.output.nodes_visited[0]);
   if(watsonResultado.output.nodes_visited[0]=='node_1_1564196062722'){
     console.log('nodo de saludo');
-  }else if(watsonResultado.context.autentificar==false && (watsonResultado.output.nodes_visited[0]=='node_3_1564202175836' || watsonResultado.output.nodes_visited[0]=='node_1_1565962892286' || watsonResultado.output.nodes_visited[0]=='slot_9_1567193904097' || watsonResultado.output.nodes_visited[0]=='node_6_1565841314671' || watsonResultado.output.nodes_visited[0]=='slot_2_1567193679116' || watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'  ||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'||watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'||watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906' ||watsonResultado.output.nodes_visited[0]=='slot_9_1566838025356' )){
+  }else if(watsonResultado.context.autentificar==false && (watsonResultado.output.nodes_visited[0]=='node_3_1564202175836' || watsonResultado.output.nodes_visited[0]=='node_1_1565962892286' || watsonResultado.output.nodes_visited[0]=='slot_9_1567193904097' || watsonResultado.output.nodes_visited[0]=='node_6_1565841314671' || watsonResultado.output.nodes_visited[0]=='slot_2_1567193679116' || watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'  ||watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'||watsonResultado.output.nodes_visited[0]=='slot_10_1566586406581'||watsonResultado.output.nodes_visited[0]=='slot_4_1566835792906' ||watsonResultado.output.nodes_visited[0]=='slot_9_1566838025356'||watsonResultado.output.nodes_visited[0]=='slot_6_1567538940835' )){
     console.log('nodo autentificar');
     for(var i in entidad){
       if(entidad[i].value=="#doc" || entidad[i].value=="cédula"){
@@ -69,7 +69,7 @@ async function decisionDialogos(watsonResultado,req){
         await validarCedula(watsonResultado);
       }
     }
-    if(watsonResultado.context.autentificar==true && (watsonResultado.output.nodes_visited[0]=='slot_9_1566838025356'  || watsonResultado.output.nodes_visited[0]=='slot_9_1567193904097'||  watsonResultado.output.nodes_visited[0]=='slot_2_1567193679116' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655' )){
+    if(watsonResultado.context.autentificar==true && (watsonResultado.output.nodes_visited[0]=='slot_9_1566838025356'  || watsonResultado.output.nodes_visited[0]=='slot_9_1567193904097'||  watsonResultado.output.nodes_visited[0]=='slot_2_1567193679116' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655' ||watsonResultado.output.nodes_visited[0]=='slot_6_1567538940835')){
       watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
     }
     if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='slot_8_1566835206586'){
@@ -166,13 +166,12 @@ async function decisionDialogos(watsonResultado,req){
       watsonResultado.output.generic[0]=[];
       watsonResultado.output.text[0]=watsonResultado.output.generic[0]=await watsonResultado.context.direcciones;
     } 
-  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566322566592'){
+  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566322566592' || watsonResultado.output.nodes_visited[0]=='node_4_1566585572273'){
     console.log('nodo cerrar sesion');
-    watsonResultado.context=null;
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
-  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724' ) {
+  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724'|| watsonResultado.output.nodes_visited[0]=='node_10_1566352695700' ) {
     console.log('Lugares de pago');
     watsonResultado.output.generic[0].response_type="link";
       if(watsonResultado.context.lpago==undefined){
