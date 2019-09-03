@@ -51,109 +51,107 @@ app.use(morgan('dev'));
 
 app.use("/cobranzas",pruebaRutas);
 
-
 io.on('connection', (socket)=>{
-    console.log("USUARIO CONECTADO"+socket.id);
+	console.log("USUARIO CONECTADO"+socket.id);
   
-      io.emit('salas', salas);
-      io.emit('session_update', usuarios);
-      socket.on('update_list',( data )=> 
-      {               
-          if(String(data.action) == 'login')
-          {
-              var user = { idSocket: socket.id, id: data.id, usuario: data.usuario };
-              console.log(user)
-              var comprobar = buscarUsuario(user.id)
-              //console.log(comprobar)
-              if(comprobar == false){
-                  console.log("no exis")
-                  usuarios.push(user);
-              }else{
-                  console.log("si exis")
-                  io.emit('salas', salas);
-                  usuarios.forEach(userb => {
-                      if(userb.id == user.id){
-                          userb.idSocket = socket.id;
+	  io.emit('salas', salas);
+	  io.emit('session_update', usuarios);
+	  socket.on('update_list',( data )=> 
+	  {               
+		  if(String(data.action) == 'login')
+		  {
+			  var user = { idSocket: socket.id, id: data.id, usuario: data.usuario };
+			  console.log(user)
+			  var comprobar = buscarUsuario(user.id)
+			  //console.log(comprobar)
+			  if(comprobar == false){
+				  console.log("no exis")
+				  usuarios.push(user);
+			  }else{
+				  console.log("si exis")
+				  io.emit('salas', salas);
+				  usuarios.forEach(userb => {
+					  if(userb.id == user.id){
+						  userb.idSocket = socket.id;
   
-                      }
-                      
-                  });
-              }
-              console.log(usuarios)
+					  }
+					  
+				  });
+			  }
+			  console.log(usuarios)
   
-          }
-          else
-          {
-              // Borrar al usuario de las sesiones
-              var index = fnFindUser(data.id);
-              
-              if (index > -1) 
-              {
-                  usuarios.splice(index, 1);
-              }
-          } 
-          
-          io.emit('session_update', usuarios);
-          
-      });
-      socket.on('privatechatroom', (data)=> {
-          console.log(data)
-          socket.join (data.sala);
-          var sala = {
-              sala:String,
-              idAsesor:String,
-              cliente:String,
-              asesor:String
-          }
-          sala.sala = data.sala;
-          sala.idAsesor = data.idAsesor;
-          sala.cliente = data.usuario;
-          sala.asesor = data.asesor;
-          salas.push(sala);
-          console.log(sala)
-          io.emit('salas', salas);
+		  }
+		  else
+		  {
+			  // Borrar al usuario de las sesiones
+			  var index = fnFindUser(data.id);
+			  
+			  if (index > -1) 
+			  {
+				  usuarios.splice(index, 1);
+			  }
+		  } 
+		  
+		  io.emit('session_update', usuarios);
+		  
+	  });
+	  socket.on('privatechatroom', (data)=> {
+		  console.log(data)
+		  socket.join (data.sala);
+		  var sala = {
+			  sala:String,
+			  idAsesor:String,
+			  cliente:String,
+			  asesor:String
+		  }
+		  sala.sala = data.sala;
+		  sala.idAsesor = data.idAsesor;
+		  sala.cliente = data.usuario;
+		  sala.asesor = data.asesor;
+		  salas.push(sala);
+		  console.log(sala)
+		  io.emit('salas', salas);
   
-                  });
-      socket.on('deleteSala',(data)=>{
-          console.log("antes salas")
-          console.log(salas)
-          salas.forEach((s,x) => {
-              
-              if(s.sala == data.sala){
-                  socket.leave(data.sala);
-                  salas.splice(x, 1);
-              }
-          });
-          io.emit('salas', salas);
-          io.emit('deletSala',salas);
-          console.log("despues salas")
-          console.log(salas)
+				  });
+	  socket.on('deleteSala',(data)=>{
+		  console.log("antes salas")
+		  console.log(salas)
+		  salas.forEach((s,x) => {
+			  
+			  if(s.sala == data.sala){
+				  socket.leave(data.sala);
+				  salas.splice(x, 1);
+			  }
+		  });
+		  io.emit('salas', salas);
+		  console.log("despues salas")
+		  console.log(salas)
   
-      })
-      socket.on('unirSala', (data)=> {
-      console.log(data)
+	  })
+	  socket.on('unirSala', (data)=> {
+	  console.log(data)
   socket.join (data.sala);
   
-      }); 
-          
-      socket.on('sendmail',(data)=>
+	  }); 
+		  
+	  socket.on('sendmail',(data)=>
   {
-      io.sockets.in(data.sala).emit('new_msg', {msg: data.message,tipo:data.tipo});
-              console.log(data.sala);
-      });
-      socket.on("NuevoMsj",(data)=>{
-      console.log(data)
-      socket.emit('Mensaje-recibido',{
-        message:data
-      })
-      })
+	  io.sockets.in(data.sala).emit('new_msg', {msg: data.message,tipo:data.tipo});
+			  console.log(data.sala);
+	  });
+	  socket.on("NuevoMsj",(data)=>{
+	  console.log(data)
+	  socket.emit('Mensaje-recibido',{
+		message:data
+	  })
+	  })
   
-      socket.on('disconnect',()=>{
-      console.log('Usuario desconectado')
-      })
+	  socket.on('disconnect',()=>{
+	  console.log('Usuario desconectado')
+	  })
   
   })
-
+  
   
 
 
