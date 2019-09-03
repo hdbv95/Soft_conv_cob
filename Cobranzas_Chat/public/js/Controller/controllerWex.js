@@ -166,13 +166,12 @@ async function decisionDialogos(watsonResultado,req){
       watsonResultado.output.generic[0]=[];
       watsonResultado.output.text[0]=watsonResultado.output.generic[0]=await watsonResultado.context.direcciones;
     } 
-  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566322566592'){
+  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566322566592' || watsonResultado.output.nodes_visited[0]=='node_4_1566585572273'){
     console.log('nodo cerrar sesion');
-    watsonResultado.context=null;
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
-  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724' ) {
+  }else if (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724'|| watsonResultado.output.nodes_visited[0]=='node_10_1566352695700' ) {
     console.log('Lugares de pago');
     watsonResultado.output.generic[0].response_type="link";
       if(watsonResultado.context.lpago==undefined){
