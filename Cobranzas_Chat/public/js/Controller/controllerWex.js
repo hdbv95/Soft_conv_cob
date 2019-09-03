@@ -101,7 +101,7 @@ async function decisionDialogos(watsonResultado,req){
             }
           }
     }
-  }else if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'   || watsonResultado.output.nodes_visited[0]=='slot_8_1566181224797' || watsonResultado.context.listarPrestamos!=undefined   ){
+  }else if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'   || watsonResultado.output.nodes_visited[0]=='slot_8_1566181224797' || watsonResultado.context.listarPrestamos!=undefined || watsonResultado.output.nodes_visited[0]=='slot_6_1567538940835'){
     watsonResultado.context.numeroPrestamo=null;
     watsonResultado.output.text[0]="Por favor escoja un prestamo para continuar";
     watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
