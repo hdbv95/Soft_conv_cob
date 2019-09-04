@@ -24,6 +24,10 @@ var tramos={
         wconv_version_date : '2019-01-01',
         wconv_apikey : 'Xi5-lBPBzaio_37A8b6GHn3BTuVaM3s6lv2lqBoZYjgS',
         wconv_url : 'https://gateway.watsonplatform.net/natural-language-understanding/api',
+    },toneA:{
+        wconv_version_date : '2019-01-01',
+        wconv_apikey : 'ApefbasJf8uPHymEuwJd7_-sHmf_aZAAxJtn9-WNJQRF',
+        wconv_url : 'https://gateway.watsonplatform.net/tone-analyzer/api',
     }
 }
 
