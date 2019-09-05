@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-
 var controllereWex=require('../Controller/controllerWex');
 var controllerPrestamo=require('../Controller/controllerPrestamo');
 var controllerPersona=require('../Controller/controllerPersona');
 var controllerNLU= require('../Controller/ControllerNLU');
+var controllerToneAnalizer=require('../Controller/ControllerToneA');
+var controllerSocialMedia=require('../Controller/ControllerSocialMedia');
 const validatePayloadMiddleware = (req,res,next)=>{
 
     if(req.body){
@@ -20,6 +21,8 @@ router.post('/enviarMensaje', validatePayloadMiddleware,controllereWex.postEnvia
 router.get('/obtener-prestamos',controllerPrestamo.ConsultarTodosPrestamos);
 router.post('/login',controllerPersona.loginUsuario);
 router.post('/enviarMail',controllerPersona.enviarMail);
-router.post('/analisiSentimientos',controllerNLU.postAnalizarTexto);
 
+router.post('/analisiSentimientos',controllerNLU.postAnalizarTexto);
+router.post('/ToneAnalizer',controllerToneAnalizer.postToneAnalizer);
+router.get('/dataSocialMedia',controllerSocialMedia.dataSocialMedia);
 module.exports=router;
