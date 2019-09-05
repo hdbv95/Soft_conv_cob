@@ -5,6 +5,7 @@ var controllerPrestamo=require('../Controller/controllerPrestamo');
 var controllerPersona=require('../Controller/controllerPersona');
 var controllerNLU= require('../Controller/ControllerNLU');
 var controllerToneAnalizer=require('../Controller/ControllerToneA');
+var controllerSocialMedia=require('../Controller/ControllerSocialMedia');
 const validatePayloadMiddleware = (req,res,next)=>{
 
     if(req.body){
@@ -23,4 +24,5 @@ router.post('/enviarMail',controllerPersona.enviarMail);
 
 router.post('/analisiSentimientos',controllerNLU.postAnalizarTexto);
 router.post('/ToneAnalizer',controllerToneAnalizer.postToneAnalizer);
+router.get('/dataSocialMedia',controllerSocialMedia.dataSocialMedia);
 module.exports=router;
