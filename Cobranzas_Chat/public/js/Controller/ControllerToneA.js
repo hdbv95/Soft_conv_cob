@@ -11,7 +11,7 @@ var tone = new toneAnalizer({
 
 controllerTone.postToneAnalizer=async (req,res)=>{
 const toneParams = {
-  tone_input: req.body ,
+  tone_input: req.body,
   content_type: 'application/json',
 };
 console.log(toneParams)
