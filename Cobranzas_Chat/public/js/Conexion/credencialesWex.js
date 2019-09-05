@@ -16,9 +16,9 @@ var tramos={
             "database": "MDCliente"
             } 
     },mongo:{
-        url:'mongodb://192.168.10.167:27017/tracking',
-        user: "admin",
-        pwd: "123"
+        url:'mongodb://192.168.10.164:27017/ppyton',
+        user:"" ,//"amin",
+        pwd:"" //"123"
     },NLU:{
         wconv_version_date : '2019-01-01',
         wconv_apikey : 'Xi5-lBPBzaio_37A8b6GHn3BTuVaM3s6lv2lqBoZYjgS',
