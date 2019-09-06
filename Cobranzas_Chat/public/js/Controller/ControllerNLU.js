@@ -10,7 +10,7 @@ var NLU= new naturalLanguage({
   });
   
   var analyzeParams = {
-    "url": "",
+    "text": "",
     "features": {
       "sentiment": {
       },
