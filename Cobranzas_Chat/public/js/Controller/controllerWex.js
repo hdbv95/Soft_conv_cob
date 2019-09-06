@@ -92,7 +92,8 @@ async function decisionDialogos(watsonResultado,req){
             }
           }
     }
-  }else if(watsonResultado.context.autentificar==true && watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'   || watsonResultado.output.nodes_visited[0]=='slot_8_1566181224797' || watsonResultado.context.listarPrestamos!=undefined || watsonResultado.output.nodes_visited[0]=='slot_6_1567538940835'){
+  }else if(watsonResultado.context.autentificar==true && (watsonResultado.output.nodes_visited[0]=='node_5_1566181166942' || watsonResultado.output.nodes_visited[0]=='slot_3_1566837329655'   || watsonResultado.output.nodes_visited[0]=='slot_8_1566181224797' ||watsonResultado.output.nodes_visited[0]=='slot_6_1567538940835')){
+    console.log("listar prestamo");
     watsonResultado.context.numeroPrestamo=null;
     watsonResultado.output.text[0]="Por favor escoja un prestamo para continuar";
     watsonResultado.output.generic[0]=ConsultaPrestamo(watsonResultado);
@@ -101,7 +102,6 @@ async function decisionDialogos(watsonResultado,req){
         SeleccionarPrestamo(watsonResultado);
       }
     }
-    
   }else if(watsonResultado.output.nodes_visited[0]=='node_6_1566273315619' || watsonResultado.output.nodes_visited[0]=='slot_4_1566321502220' || watsonResultado.output.nodes_visited[0]=='node_7_1566273035851' ){
     console.log('nodo interes x dias calculado');
     for(var i in entidad){
@@ -162,7 +162,7 @@ async function decisionDialogos(watsonResultado,req){
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
-  }else if (watsonResultado.context.autentificar == true && (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724'|| watsonResultado.output.nodes_visited[0]=='node_10_1566352695700' )) {
+  }else if (watsonResultado.context.autentificar == true && (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724')) {
     console.log('Lugares de pago');
     watsonResultado.output.generic[0].response_type="link";
       if(watsonResultado.context.lpago==undefined){
@@ -246,7 +246,7 @@ async function SeleccionarPrestamo(watsonResultado,req){
           watsonResultado.output.generic[0]=respuestaText;
           watsonResultado.output.text[0]=respuestaText;
           watsonResultado.context.system.dialog_stack[0]=[]; 
-          watsonResultado.context.system.dialog_stack[0]={"dialog_node": "response_2_1566838080119"};        
+          watsonResultado.context.system.dialog_stack[0]={"dialog_node": "response_3_1567544098207"};        
           break;
         }else{
           watsonResultado.context.numeroPrestamo=null;
