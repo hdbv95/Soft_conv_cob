@@ -25,7 +25,7 @@ var NLU= new naturalLanguage({
 
 
 controllerNLU.postAnalizarTexto=async(req,res)=>{
-    analyzeParams.text=req.body.url;
+    analyzeParams.url=req.body.url;
     console.log(analyzeParams); 
     await NLU.analyze(analyzeParams).then(analysisResults => {
         console.log(analyzeParams);
