@@ -25,4 +25,6 @@ router.post('/enviarMail',controllerPersona.enviarMail);
 router.post('/analisiSentimientos',controllerNLU.postAnalizarTexto);
 router.post('/ToneAnalizer',controllerToneAnalizer.postToneAnalizer);
 router.get('/dataSocialMedia',controllerSocialMedia.dataSocialMedia);
+router.get('/dataSocialMedia2/:page?', controllerSocialMedia.dataSocialMedia2);
+router.get('/dataSocialMediaFiltros', controllerSocialMedia.dataSocialMediaFiltros);
 module.exports=router;

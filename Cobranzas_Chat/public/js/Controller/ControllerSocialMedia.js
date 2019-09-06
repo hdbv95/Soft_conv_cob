@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 var credencialesWex=require('../Conexion/credencialesWex');
 var moment= require('moment');
 var mongoData={}
+var mongoosePaginate=require('mongoose-pagination');
+
 
 mongoose.connect(credencialesWex.mongo.url,{dbName: "ppython",useNewUrlParser: true}
 ).then(()=>{console.log('successfully connected to MongoDB');/*mongod.cfg cambiar bindIp: de 127.0.0.1 a 0.0.0.0 */}).catch(err=>{
@@ -66,7 +68,54 @@ mongoData.dataSocialMedia=async(req,res)=>{
     res.send(JSONsalida);
 }
 
+//ESTO EN EL CONTROLLER SOCIAL MEDIA
 
+
+mongoData.dataSocialMedia2 = (req, res) => {
+    var page = 1;
+    if (req.params.page) {
+      page = req.params.page;
+    }
+  
+    var itemsPerPage = 9;
+    sugerencia.find().paginate(page, itemsPerPage, (err, tweets, total) => {
+      if (err) return res.status(500).send({ n: '3', message: 'Error en la peticion' });
+  
+      if (tweets && tweets.length > 0) {
+        return res.status(200).send({
+          n: '1',
+          tweets,
+          total,
+          itemsPerPage,
+          pages: Math.ceil(total / itemsPerPage)
+        });
+      } else {
+        return res.status(404).send({ n: '2', message: 'no existe tweets.' });
+      }
+  
+    });
+  }
+  
+  mongoData.dataSocialMediaFiltros = (req, res) => {
+  
+    sugerencia.find().exec((err, tweets) => {
+      if (err) return res.status(500).send({ n: '3', message: 'Error en la peticion' });
+  
+      if (tweets && tweets.length > 0) {
+  
+        return res.status(200).send({
+          n: '1',
+          tweets
+          
+        });
+      } else {
+        return res.status(404).send({ n: '2', message: 'no existe tweets.' });
+      }
+  
+    });
+  }
+
+  
 
 
   module.exports=mongoData
