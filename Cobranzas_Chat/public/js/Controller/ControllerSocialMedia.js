@@ -9,7 +9,7 @@ var mongoosePaginate=require('mongoose-pagination');
 mongoose.connect(credencialesWex.mongo.url,{dbName: "ppython",useNewUrlParser: true}
 ).then(()=>{console.log('successfully connected to MongoDB');/*mongod.cfg cambiar bindIp: de 127.0.0.1 a 0.0.0.0 */}).catch(err=>{
   console.log("error");
-  process.exit();
+  //process.exit();
 });
 
 

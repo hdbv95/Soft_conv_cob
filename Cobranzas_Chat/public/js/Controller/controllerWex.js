@@ -162,7 +162,7 @@ async function decisionDialogos(watsonResultado,req){
     req.session.destroy();
   }else if (watsonResultado.output.nodes_visited[0]=='node_2_1566353121923'){
     console.log('nodo asignar usuario');
-  }else if (watsonResultado.context.autentificar == true && (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724')) {
+  }else if (watsonResultado.context.autentificar == true && (watsonResultado.output.nodes_visited[0]=='node_10_1566398034603' || watsonResultado.output.nodes_visited[0]=='slot_1_1566398196724'||watsonResultado.output.nodes_visited[0]=='slot_8_1568042358328')) {
     console.log('Lugares de pago');
     watsonResultado.output.generic[0].response_type="link";
       if(watsonResultado.context.lpago==undefined){
