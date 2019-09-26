@@ -12,16 +12,47 @@ mongoose.connect(credencialesWex.mongo.url,{dbName: "ppython",useNewUrlParser: t
   //process.exit();
 });
 
+var jsonProcincias=[
+"Azuay", "Cuenca",
+"Bolívar", "Guaranda",
+"Cañar", "Azogues",
+"Carchi", "Tulcán",
+"Chimborazo", "Riobamba",
+"Cotopaxi", "Latacunga",
+"El Oro", "Machala",
+"Esmeraldas", "Esmeraldas",
+"Galápagos", "Puerto Baquerizo Moreno",
+"Guayas", "Guayaquil",
+"Imbabura", "Ibarra",
+"Loja","Cuenca",
+"Los Ríos", "Babahoyo",
+"Manabí", "Portoviejo",
+"Morona Santiago", "Macas",
+"Napo", "Tena",
+"Orellana", "Francisco de Orellana",
+"Pastaza", "Puyo",
+"Pichincha", "Quito",
+"Santa Elena", "Santa Elena",
+"Santo Domingo", "Santo Domingo",
+"Sucumbíos", "Nueva Loja",
+"Tungurahua", "Ambato",
+"Zamora Chinchipe", "Zamora",
+]
+
+
+
 
 mongoData.dataSocialMedia=async(req,res)=>{
     var respuestaMongo= await sugerencia.find();
     var JSONsalida=[];
     
     
-    try {
-        for(var i in respuestaMongo){
-            var sentimiento =respuestaMongo[i].sentimientos;
+   
+        for(var i=0;i<respuestaMongo.length;i++){
+          console.log(i);
+            var sentimiento ="";
             var emotion=respuestaMongo[i].emociones;
+            var score="";
             var sadness=0;
             var joy=0;
             var fear=0;
@@ -37,15 +68,40 @@ mongoData.dataSocialMedia=async(req,res)=>{
                 }
             }
 
-            
+            var resulltado;
 
+            for(var j in jsonProcincias){
+              if(respuestaMongo[i].location!=null){
+              let palabra = respuestaMongo[i].location.toUpperCase().indexOf(jsonProcincias[j].toUpperCase());
+              if(palabra!=-1){
+                resulltado= jsonProcincias[j].toUpperCase();
+              }else if(respuestaMongo[i].location!=undefined && respuestaMongo[i].location.toUpperCase().indexOf("ECUADOR")!=-1){
+                resulltado="ECUADOR";
+              }
+            }
+            };
+
+
+            if(resulltado== undefined){
+              resulltado=null;
+            }
+            
+            if(respuestaMongo[i].sentimientos!=""){
+              sentimiento=JSON.parse(respuestaMongo[i].sentimientos).sentiment.document.label
+              score=JSON.parse(respuestaMongo[i].sentimientos).sentiment.document.score;
+            }else{
+              sentimiento="neutral"
+              score=0;
+            }
+            
             JSONsalida.push(
                 {
-                 "location": respuestaMongo[i].location,
-                 "sentiment":JSON.parse(sentimiento).sentiment.document.label,
-                 "score":JSON.parse(sentimiento).sentiment.document.score,
+                 "location": resulltado,//respuestaMongo[i].location,
+                 "text":respuestaMongo[i].text,
+                 "sentiment":sentimiento,
+                 "score":score,
                  "userName" : respuestaMongo[i].userName,
-                 "created_at": moment(respuestaMongo[i].created_at).subtract(Math.floor(Math.random()*300)+1,'d').format('YYYY-MM-DD'),
+                 "created_at":moment(respuestaMongo[i].created_at).format('YYYY-MM-DD'),//  moment(respuestaMongo[i].created_at).subtract(Math.floor(Math.random()*300)+1,'d').format('YYYY-MM-DD'),
                  "name":respuestaMongo[i].name,
                  "retweet_count": respuestaMongo[i].retweet_count,
                  "followers_count": respuestaMongo[i].followers_count,
@@ -59,12 +115,11 @@ mongoData.dataSocialMedia=async(req,res)=>{
                  //"emociones":
                 })
            }
-    } catch (error) {
-        console.log(error);
-    }
+    
    
-     console.log(JSONsalida.length)
 
+
+    console.log(respuestaMongo.length);
     res.send(JSONsalida);
 }
 

@@ -16,7 +16,7 @@ var tramos={
             "database": "MDCliente"
             } 
     },mongo:{
-        url:'mongodb://192.168.10.178:27017/ppyton',
+        url:'mongodb://40.117.183.46:27017/ppyton',
         user:"" ,//"amin",
         pwd:"" //"123"
     },NLU:{
